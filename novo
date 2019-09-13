@@ -1,0 +1,63 @@
+enable
+configure terminal
+ip domain-name senai.local
+username ianmiguel privilege 15 secret coxinha123
+username estagiario privilege 1 secret gadocorno
+login block-for 60 attempts 3 within 60
+security passwords min-lenght 8
+crypto key generate rsa general-key modulus 1024
+line vty 0 15
+transport input ssh
+exec-timeout 10
+login local
+do wr
+
+
+enable
+configure terminal
+hostname RT-00
+banner motd " ACESSO SOMENTE PARA O DEPARTAMENTO DE TI "
+enable secret SenhaEnable
+line console 0
+password SenhadaConsole
+login
+exit
+line vty 0 15
+password SenhadaVTY
+login
+exit
+service password-encryption
+interface gigabitEthernet 0/0
+ip address 192.168.0.1 255.255.255.0
+description REDE 192.168.0.0/24
+no shutdown
+exit
+interface gigabitEthernet 0/1
+ip address 172.0.0.1 255.255.0.0
+description REDE 172.16.0.0/16
+no shutdown
+interface gigabitEthernet 0/2
+ip address 10.0.63.254 255.255.192.0
+description REDE 10.0.0.0/18
+no shutdown
+do wr
+
+enable
+configure terminal
+hostname SW-03
+banner motd "ACESSO SOMENTE PARA O DEPARTAMENTO DE TI"
+enable secret SenhaEnable
+line console 0
+password SenhadaConsole
+login
+exit
+service password-encryption
+line vty 0 15
+password SenhadaVTY
+login
+exit
+interface vlan 1
+ip address 10.0.63.254 255.255.192.0
+description INTERFACE DE GERENCIAMENTO
+no shutdown
+do wr
